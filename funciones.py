@@ -13,7 +13,6 @@ def registrar_paciente():
 
     codigo = input("Ingrese el código del paciente: ")
 
-    # Verificar que el código no esté repetido
     for paciente in pacientes:
         if paciente.codigo == codigo:
             print("Error: El código ya está registrado.")
@@ -43,7 +42,6 @@ def registrar_medico():
 
     codigo = input("Ingrese el código del médico: ")
 
-    # Verificar que el código no esté repetido
     for medico in medicos:
         if medico.codigo == codigo:
             print("Error: El código ya está registrado.")
