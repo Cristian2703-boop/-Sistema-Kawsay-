@@ -13,6 +13,7 @@ def registrar_paciente():
 
     codigo = input("Ingrese el código del paciente: ")
 
+    # Verificar que el código no esté repetido
     for paciente in pacientes:
         if paciente.codigo == codigo:
             print("Error: El código ya está registrado.")
@@ -42,6 +43,7 @@ def registrar_medico():
 
     codigo = input("Ingrese el código del médico: ")
 
+    # Verificar que el código no esté repetido
     for medico in medicos:
         if medico.codigo == codigo:
             print("Error: El código ya está registrado.")
@@ -107,25 +109,23 @@ def programar_cita():
 def registrar_atencion():
     print("\n--- REGISTRO DE ATENCIÓN ---")
 
-    codigo_paciente = input("Ingrese el código del paciente: ")
-    paciente = buscar_paciente(codigo_paciente)
+    codigo_cita = input("Ingrese el código de la cita: ")
 
-    if paciente is None:
-        print("Error: El paciente no está registrado.")
-        return
+    cita_encontrada = None
 
-    codigo_medico = input("Ingrese el código del médico: ")
-    medico = buscar_medico(codigo_medico)
+    for cita in citas:
+        if cita.codigo == codigo_cita:
+            cita_encontrada = cita
+            break
 
-    if medico is None:
-        print("Error: El médico no está registrado.")
+    if cita_encontrada is None:
+        print("Error: La cita no está registrada.")
         return
 
     descripcion = input("Ingrese la descripción de la atención: ")
 
     atencion = {
-        "codigo_paciente": paciente.codigo,
-        "codigo_medico": medico.codigo,
+        "codigo_cita": cita_encontrada.codigo,
         "descripcion": descripcion
     }
 
@@ -135,28 +135,47 @@ def registrar_atencion():
 
 
 def consultar_historial():
-    print("\n--- HISTORIAL DE ATENCIONES ---")
+    print("\n========== HISTORIAL DEL PACIENTE ==========")
 
-    codigo = input("Ingrese el código del paciente: ")
+    codigo = input("Ingrese código del paciente: ")
     paciente = buscar_paciente(codigo)
 
     if paciente is None:
         print("Error: El paciente no está registrado.")
         return
 
-    print(f"\nHistorial de: {paciente.nombre}")
+    print(f"\nPaciente: {paciente.nombre}")
+    print(f"Código: {paciente.codigo}")
+    print(f"Edad: {paciente.edad}")
+    print("--------------------------------")
 
     encontrado = False
 
-    for atencion in atenciones:
-        if atencion["codigo_paciente"] == codigo:
-            print(f"Médico: {atencion['codigo_medico']}")
-            print(f"Descripción: {atencion['descripcion']}")
-            print("-----------------------------")
+    for cita in citas:
+
+        if cita.paciente.codigo == paciente.codigo:
+
             encontrado = True
 
+            print(f"Cita: {cita.codigo}")
+            print(f"Fecha: {cita.fecha}")
+            print(f"Médico: {cita.medico.nombre}")
+            print(f"Especialidad: {cita.medico.especialidad}")
+
+            atencion_encontrada = False
+
+            for atencion in atenciones:
+                if atencion["codigo_cita"] == cita.codigo:
+                    print(f"Atención: {atencion['descripcion']}")
+                    atencion_encontrada = True
+
+            if not atencion_encontrada:
+                print("Atención: Pendiente de registro.")
+
+            print("--------------------------------")
+
     if not encontrado:
-        print("Este paciente no tiene atenciones registradas.")
+        print("Este paciente no tiene citas registradas.")
 
 
 def buscar_por_especialidad():
@@ -176,5 +195,7 @@ def buscar_por_especialidad():
 
         for medico in encontrados:
             print(medico.resumen())
+    else:
+        print("No se encontraron médicos con esa especialidad.")
     else:
         print("No se encontraron médicos con esa especialidad.")
