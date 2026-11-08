@@ -14,7 +14,7 @@ def mostrar_menu():
     print("2. Registrar médico")
     print("3. Programar cita")
     print("4. Registrar atención")
-    print("5. Consultar historial")
+    print("5. Ver historial de paciente")
     print("6. Buscar médico por especialidad")
     print("7. Salir")
     print("====================================")
